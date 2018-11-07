@@ -1,41 +1,43 @@
 package com.popovich.model;
 
-public class Skill {
-    private Long id;
-    private String name;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-    /**
-     * Default Constructor
-     */
+@Entity
+@Table(name = "skills")
+public class Skill extends BaseEntity{
+    private String skillName;
+    private Set<Developer> developers = new HashSet<>();
 
     public Skill(){
+        super();
     }
 
-    /**
-     * Plain constructor
-     */
-
-    public Skill(String name) {
-        this.name = name;
+    public Skill(String skillName){
+        super();
+        this.skillName = skillName;
     }
 
-    public Long getId() {
-        return id;
+    @Column(name = "skill_name",unique = true, nullable = false)
+    public String getSkillName() {
+        return skillName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSkillName(String skillName) {
+        this.skillName = skillName;
     }
 
-    public String getName() {
-        return name;
+    @ManyToMany(mappedBy = "skills")
+    public Set<Developer> getDevelopers() {
+        return developers;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDevelopers(Set<Developer> developers) {
+        this.developers = developers;
     }
 
-    public boolean equals(Object object) {
+    /*public boolean equals(Object object) {
         if (object == null) {
             return false;
         }
@@ -54,5 +56,5 @@ public class Skill {
         int code = 0;
         code = (id + name).hashCode();
         return code;
-    }
+    }*/
 }

@@ -1,40 +1,29 @@
 package com.popovich.model;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
-public class Developer {
-    private Long id;
+@Entity
+@Table(name = "developers")
+public class Developer extends BaseEntity {
+
     private String firstName;
     private String lastName;
     private String speciality;
-    private Set<Skill> skills;
+    private Set<Skill> skills = new HashSet<>();
     private Account account;
 
-    /**
-     * Default Constructor
-     */
-    public Developer() {
+    public Developer(){
+        super();
     }
 
-    /**
-     * Plain constructor
-     */
-
-    public Developer(String firstName, String lastName, String speciality, Set<Skill> skills, Account account) {
+    public Developer(String firstName, String lastName, String speciality){
         this.firstName = firstName;
         this.lastName = lastName;
         this.speciality = speciality;
-        this.skills = skills;
-        this.account = account;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -43,6 +32,7 @@ public class Developer {
         this.firstName = firstName;
     }
 
+    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -51,6 +41,7 @@ public class Developer {
         this.lastName = lastName;
     }
 
+    @Column(name = "speciality")
     public String getSpeciality() {
         return speciality;
     }
@@ -59,6 +50,9 @@ public class Developer {
         this.speciality = speciality;
     }
 
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "developer_skills", joinColumns = @JoinColumn(name = "developer_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id"))
     public Set<Skill> getSkills() {
         return skills;
     }
@@ -67,6 +61,8 @@ public class Developer {
         this.skills = skills;
     }
 
+    @OneToOne
+    @PrimaryKeyJoinColumn
     public Account getAccount() {
         return account;
     }

@@ -9,27 +9,24 @@
     <changeSet id="1" author="Stas" runOnChange="true">
         <createTable tableName="developers">
             <column  name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" unique="true" nullable="false"/>
             </column>
-            <column name="firstName" type="varchar(50)">
+            <column name="first_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="lastName" type="varchar(50)">
+            <column name="last_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="specialty" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="account" type="int">
+            <column name="speciality" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <createTable tableName="skills">
             <column  name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" unique="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(50)">
-                <constraints nullable="false"/>
+            <column name="skill_name" type="varchar(50)">
+                <constraints unique="true" nullable="false"/>
             </column>
         </createTable>
 
@@ -48,12 +45,13 @@
 
         <createTable tableName="accounts">
             <column  name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" unique="true" nullable="false"/>
             </column>
-            <column name="accountData" type="varchar(50)">
+            <column name="account_data" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
 
     </changeSet>
 </databaseChangeLog>

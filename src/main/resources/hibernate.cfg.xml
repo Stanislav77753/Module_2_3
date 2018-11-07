@@ -18,8 +18,11 @@
         <property name="hibernate.connection.password">
             root
         </property>
+        <property name="show_sql">true</property>
+        <mapping class="com.popovich.model.Skill" />
+        <mapping class="com.popovich.model.Account" />
+        <mapping class="com.popovich.model.Developer" />
 
-        <mapping resource="Developer.hbm.xml"/>
 
     </session-factory>
 </hibernate-configuration>
