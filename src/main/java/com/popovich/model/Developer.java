@@ -23,6 +23,11 @@ public class Developer extends BaseEntity {
         this.speciality = speciality;
     }
 
+    public Developer(String firstName, String lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
@@ -50,7 +55,7 @@ public class Developer extends BaseEntity {
         this.speciality = speciality;
     }
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "developer_skills", joinColumns = @JoinColumn(name = "developer_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
     public Set<Skill> getSkills() {
@@ -59,6 +64,10 @@ public class Developer extends BaseEntity {
 
     public void setSkills(Set<Skill> skills) {
         this.skills = skills;
+    }
+
+    public void addSkill(Skill skill){
+        this.skills.add(skill);
     }
 
     @OneToOne

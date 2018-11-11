@@ -23,6 +23,8 @@ public class ConsoleHelper {
                     developerView.addDeveloper();
                 }else if(command.equals("add skills for developer")){
                     developerView.addSkills();
+                }else if(command.equals("delete developer")){
+                    developerView.deleteDeveloper();
                 }
             }catch (ConstraintViolationException e){
                 System.out.println("this entity already has added");

@@ -2,19 +2,19 @@ package com.popovich.view;
 
 import com.popovich.controller.AccountController;
 import com.popovich.controller.DeveloperController;
+import com.popovich.controller.SkillController;
+import com.popovich.exceptions.EntityNotExistsException;
 import com.popovich.model.Account;
 import com.popovich.model.Developer;
 import com.popovich.model.Skill;
-
-import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 public class DeveloperView {
-    private AccountView accountView = new AccountView();
     private Scanner scanner = new Scanner(System.in);
     private DeveloperController developerController = new DeveloperController();
     private AccountController accountController = new AccountController();
+    private SkillController skillController = new SkillController();
 
     public void addDeveloper(){
         Developer developer = new Developer(getName("firstName"), getName("lastName"),
@@ -26,21 +26,67 @@ public class DeveloperView {
     }
 
     public void addSkills(){
-        Developer developer = new Developer(getName("firstName"), getName("lastName"),
-                getName("speciality"));
-        developer.setId(1L);
-        Skill skill = new Skill(getName("skill"));
-        skill.setId(1L);
-        Skill skill2= new Skill(getName("skill"));
-        skill.setId(7L);
-        Set<Skill> skills = new HashSet<>();
-        skills.add(skill);
-        skills.add(skill2);
-        developer.setSkills(skills);
+        Developer developer = null;
+        try {
+            developer = getDeveloper();
+            getSkills(developer);
+        } catch (EntityNotExistsException e) {
+            System.out.println(e);
+        }
         developerController.update(developer);
     }
 
-    public String getName(String name){
+    public void deleteDeveloper(){
+        Developer developer = null;
+        Account account = null;
+        try {
+            developer = getDeveloper();
+            account = developer.getAccount();
+            developerController.delete(developer);
+            accountController.delete(account);
+        } catch (EntityNotExistsException e) {
+            System.out.println(e);
+        }
+    }
+
+    private Developer getDeveloper() throws EntityNotExistsException {
+        String firstName = getName("firstName");
+        String lastName = getName("lastName");
+        List<Developer> allDevelopers = developerController.getAll();
+        for(Developer developer: allDevelopers){
+            if(developer.getFirstName().equals(firstName) && developer.getLastName().equals(lastName)){
+                return developer;
+            }
+        }
+        throw new EntityNotExistsException("This developer not exists in database");
+    }
+
+    private void getSkills(Developer developer){
+            do{
+            String skill = getName("skill");
+            if(skill.equals("cancel")){
+                break;
+            }
+            try {
+                Skill skillFromDB = checkSkill(skill);
+                developer.addSkill(skillFromDB);
+            } catch (EntityNotExistsException e) {
+                System.out.println(e);
+            }
+        }while(true);
+    }
+
+    private Skill checkSkill(String skill) throws EntityNotExistsException {
+        List<Skill> allSkills = skillController.getAll();
+        for(Skill skills: allSkills){
+            if(skills.getSkillName().equals(skill)){
+                return skills;
+            }
+        }
+        throw new EntityNotExistsException("This skill not exists in database");
+    }
+
+    private String getName(String name){
         String result = new String();
         switch (name){
             case ("firstName"):
